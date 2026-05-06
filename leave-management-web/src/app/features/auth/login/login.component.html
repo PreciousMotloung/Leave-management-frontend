@@ -1,0 +1,71 @@
+<div class="page-container">
+  <mat-card class="card-form">
+    <mat-card-header>
+      <mat-card-title>
+        <h1>Leave Management</h1>
+        <p class="subtitle">Sign in to your account</p>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email Address</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="you@example.com" />
+          <mat-icon matSuffix>email</mat-icon>
+          @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+            <mat-error>Email is required</mat-error>
+          }
+          @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+            <mat-error>Please enter a valid email address</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+            <mat-error>Password is required</mat-error>
+          }
+          @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+            <mat-error>Password must be at least 6 characters</mat-error>
+          }
+        </mat-form-field>
+
+        @if (errorMessage) {
+          <p class="error-message">
+            <mat-icon inline>error_outline</mat-icon>
+            {{ errorMessage }}
+          </p>
+        }
+
+        <div class="form-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="full-width"
+            [disabled]="loginForm.invalid || isLoading">
+            <span class="spinner-button">
+              @if (isLoading) {
+                <mat-spinner diameter="20"></mat-spinner>
+              }
+              {{ isLoading ? 'Signing in...' : 'Sign In' }}
+            </span>
+          </button>
+
+          <p class="register-link">
+            Don't have an account?
+            <a routerLink="/register" mat-button color="primary">Create account</a>
+          </p>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

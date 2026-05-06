@@ -1,0 +1,36 @@
+mat-card-title {
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    color: #3f51b5;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0 0;
+  }
+}
+
+mat-card-content {
+  padding-top: 16px;
+}
+
+mat-form-field {
+  margin-bottom: 8px;
+}
+
+.register-link {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+

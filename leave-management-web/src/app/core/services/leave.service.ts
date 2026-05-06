@@ -1,0 +1,51 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { LeaveRequest, ApplyLeaveRequest } from '../models/leave-request.model';
+import { LeaveBalance } from '../models/leave-balance.model';
+import { LeaveType } from '../models/leave-type.model';
+
+@Injectable({ providedIn: 'root' })
+export class LeaveService {
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
+
+  getMyLeaves(): Observable<LeaveRequest[]> {
+    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/api/leaves/my`);
+  }
+
+  applyLeave(request: ApplyLeaveRequest): Observable<LeaveRequest> {
+    return this.http.post<LeaveRequest>(`${this.apiUrl}/api/leaves/apply`, request);
+  }
+
+  cancelLeave(id: number): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/api/leaves/${id}/cancel`, {});
+  }
+
+  getMyBalances(): Observable<LeaveBalance[]> {
+    return this.http.get<LeaveBalance[]>(`${this.apiUrl}/api/leaves/balances`);
+  }
+
+  getLeaveTypes(): Observable<LeaveType[]> {
+    return this.http.get<LeaveType[]>(`${this.apiUrl}/api/leave-types`);
+  }
+
+  // Manager endpoints
+  getPendingRequests(): Observable<LeaveRequest[]> {
+    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/api/manager/leaves/pending`);
+  }
+
+  approveLeave(id: number): Observable<LeaveRequest> {
+    return this.http.patch<LeaveRequest>(`${this.apiUrl}/api/manager/leaves/${id}/approve`, {});
+  }
+
+  rejectLeave(id: number, reason: string): Observable<LeaveRequest> {
+    return this.http.patch<LeaveRequest>(`${this.apiUrl}/api/manager/leaves/${id}/reject`, { reason });
+  }
+
+  getTeamBalances(): Observable<LeaveBalance[]> {
+    return this.http.get<LeaveBalance[]>(`${this.apiUrl}/api/manager/team/balances`);
+  }
+}
+
