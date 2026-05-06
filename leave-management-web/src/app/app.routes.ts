@@ -6,11 +6,13 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
+    title: 'Login — Leave Manager',
     loadComponent: () =>
       import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
   {
     path: 'register',
+    title: 'Register — Leave Manager',
     loadComponent: () =>
       import('./features/auth/register/register.component').then(m => m.RegisterComponent)
   },
@@ -24,16 +26,19 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
+        title: 'My Dashboard — Leave Manager',
         loadComponent: () =>
           import('./features/employee/dashboard/employee-dashboard.component').then(m => m.EmployeeDashboardComponent)
       },
       {
         path: 'my-leaves',
+        title: 'My Leave Requests — Leave Manager',
         loadComponent: () =>
           import('./features/employee/my-leaves/my-leaves.component').then(m => m.MyLeavesComponent)
       },
       {
         path: 'apply-leave',
+        title: 'Apply for Leave — Leave Manager',
         loadComponent: () =>
           import('./features/employee/apply-leave/apply-leave.component').then(m => m.ApplyLeaveComponent)
       }
@@ -49,16 +54,19 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
+        title: 'Manager Dashboard — Leave Manager',
         loadComponent: () =>
           import('./features/manager/dashboard/manager-dashboard.component').then(m => m.ManagerDashboardComponent)
       },
       {
         path: 'pending-requests',
+        title: 'Pending Requests — Leave Manager',
         loadComponent: () =>
           import('./features/manager/pending-requests/pending-requests.component').then(m => m.PendingRequestsComponent)
       },
       {
         path: 'team-balances',
+        title: 'Team Balances — Leave Manager',
         loadComponent: () =>
           import('./features/manager/team-balances/team-balances.component').then(m => m.TeamBalancesComponent)
       }
@@ -66,11 +74,13 @@ export const routes: Routes = [
   },
   {
     path: 'unauthorized',
+    title: 'Access Denied — Leave Manager',
     loadComponent: () =>
       import('./features/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
   },
   {
     path: '404',
+    title: 'Page Not Found — Leave Manager',
     loadComponent: () =>
       import('./features/not-found/not-found.component').then(m => m.NotFoundComponent)
   },

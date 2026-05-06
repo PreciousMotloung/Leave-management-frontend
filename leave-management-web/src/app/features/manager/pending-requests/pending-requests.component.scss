@@ -1,0 +1,26 @@
+.page-container { padding: 24px; max-width: 1200px; }
+
+.page-header {
+  margin-bottom: 24px;
+  h1 { margin: 0 0 4px; font-size: 28px; font-weight: 600; }
+  .subtitle { margin: 0; color: #666; }
+}
+
+.full-width { width: 100%; }
+.table-wrapper { overflow-x: auto; }
+
+.reason-cell { max-width: 200px; }
+
+.actions-cell {
+  white-space: nowrap;
+  .approve-btn { margin-right: 8px; }
+}
+
+.error-message {
+  color: #f44336;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+

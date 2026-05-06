@@ -1,0 +1,53 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="app-icon">manage_accounts</mat-icon>
+      <span class="app-title">Leave Manager</span>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="user-info">
+      <mat-icon>account_circle</mat-icon>
+      <div class="user-details">
+        <span class="user-name">{{ fullName }}</span>
+        <span class="user-role">Manager</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="dashboard" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="pending-requests" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>pending_actions</mat-icon>
+        <span matListItemTitle>
+          Pending Requests
+          @if (pendingCount > 0) {
+            <mat-badge [matBadge]="pendingCount" matBadgeColor="warn" matBadgeSize="small"></mat-badge>
+          }
+        </span>
+      </a>
+      <a mat-list-item routerLink="team-balances" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>people</mat-icon>
+        <span matListItemTitle>Team Balances</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <mat-divider></mat-divider>
+      <button mat-list-item class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

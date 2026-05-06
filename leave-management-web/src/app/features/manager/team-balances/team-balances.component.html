@@ -1,0 +1,86 @@
+<div class="page-container">
+  @if (isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  <div class="page-header">
+    <div>
+      <h1>Team Leave Balances</h1>
+      <p class="subtitle">Look up an employee's leave balance by their user ID</p>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <mat-card class="search-card">
+    <mat-card-content>
+      <div class="search-row">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Employee User ID</mat-label>
+          <input matInput type="number" [formControl]="userIdControl"
+            placeholder="Enter employee ID (e.g. 1)"
+            (keyup.enter)="search()" />
+          <mat-icon matPrefix>person_search</mat-icon>
+          @if (userIdControl.hasError('required') && userIdControl.touched) {
+            <mat-error>Please enter a user ID</mat-error>
+          }
+          @if (userIdControl.hasError('min') && userIdControl.touched) {
+            <mat-error>User ID must be a positive number</mat-error>
+          }
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="search()" [disabled]="userIdControl.invalid || isLoading">
+          <mat-icon>search</mat-icon>
+          Look Up Balances
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (errorMessage) {
+    <p class="error-message"><mat-icon inline>error_outline</mat-icon> {{ errorMessage }}</p>
+  }
+
+  <!-- Results -->
+  @if (searched && !isLoading) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Leave Balances for User ID: {{ userIdControl.value }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (balances.length === 0 && !errorMessage) {
+          <app-empty-state message="No balance records found for this user" icon="inbox"></app-empty-state>
+        } @else if (balances.length > 0) {
+          <table mat-table [dataSource]="balances" class="full-width">
+
+            <ng-container matColumnDef="leaveType">
+              <th mat-header-cell *matHeaderCellDef>Leave Type</th>
+              <td mat-cell *matCellDef="let row">{{ row.leaveType?.name?.replace('_', ' ') }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="available">
+              <th mat-header-cell *matHeaderCellDef>Total Days</th>
+              <td mat-cell *matCellDef="let row">{{ row.availableDays }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="used">
+              <th mat-header-cell *matHeaderCellDef>Used Days</th>
+              <td mat-cell *matCellDef="let row">{{ row.usedDays }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="remaining">
+              <th mat-header-cell *matHeaderCellDef>Remaining Days</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="remaining-days" [ngClass]="getBalanceClass(row.remainingDays)">
+                  {{ row.remainingDays }}
+                </span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+

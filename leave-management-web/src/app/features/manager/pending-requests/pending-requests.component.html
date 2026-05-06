@@ -1,0 +1,86 @@
+<div class="page-container">
+  @if (isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  <div class="page-header">
+    <div>
+      <h1>Pending Leave Requests</h1>
+      <p class="subtitle">Review and action leave requests awaiting approval</p>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <p class="error-message"><mat-icon inline>error_outline</mat-icon> {{ errorMessage }}</p>
+  }
+
+  <mat-card>
+    <mat-card-content>
+      @if (!isLoading && requests.length === 0) {
+        <app-empty-state
+          message="No pending requests — your team is all caught up!"
+          icon="check_circle">
+        </app-empty-state>
+      } @else {
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="requests" class="full-width">
+
+            <ng-container matColumnDef="employee">
+              <th mat-header-cell *matHeaderCellDef>Employee</th>
+              <td mat-cell *matCellDef="let row">
+                <strong>{{ row.user?.firstName }} {{ row.user?.lastName }}</strong>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="leaveType">
+              <th mat-header-cell *matHeaderCellDef>Leave Type</th>
+              <td mat-cell *matCellDef="let row">{{ row.leaveType?.name | titlecase }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef>Start Date</th>
+              <td mat-cell *matCellDef="let row">{{ row.startDate | date:'mediumDate' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="endDate">
+              <th mat-header-cell *matHeaderCellDef>End Date</th>
+              <td mat-cell *matCellDef="let row">{{ row.endDate | date:'mediumDate' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="days">
+              <th mat-header-cell *matHeaderCellDef>Days</th>
+              <td mat-cell *matCellDef="let row">{{ row.numberOfDays }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="reason">
+              <th mat-header-cell *matHeaderCellDef>Reason</th>
+              <td mat-cell *matCellDef="let row" class="reason-cell">
+                <span [matTooltip]="row.reason" matTooltipShowDelay="200">
+                  {{ row.reason | slice:0:50 }}{{ row.reason?.length > 50 ? '...' : '' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let row" class="actions-cell">
+                <button mat-raised-button color="primary" class="approve-btn"
+                  (click)="confirmApprove(row)">
+                  <mat-icon>check</mat-icon> Approve
+                </button>
+                <button mat-raised-button color="warn" class="reject-btn"
+                  (click)="confirmReject(row)">
+                  <mat-icon>close</mat-icon> Reject
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+
