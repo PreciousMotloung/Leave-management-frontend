@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin } from 'rxjs';
 import { LeaveService } from '../../../core/services/leave.service';
@@ -12,7 +12,7 @@ import { LeaveBalance } from '../../../core/models/leave-balance.model';
 
 @Component({
   selector: 'app-apply-leave',
-  imports: [ReactiveFormsModule, MaterialModule, LoadingSpinnerComponent, NgClass],
+  imports: [ReactiveFormsModule, MaterialModule, LoadingSpinnerComponent, NgClass, TitleCasePipe],
   templateUrl: './apply-leave.component.html',
   styleUrl: './apply-leave.component.scss'
 })
@@ -32,7 +32,7 @@ export class ApplyLeaveComponent implements OnInit {
   successMessage = '';
 
   applyForm = this.fb.group({
-    leaveType: ['', Validators.required],
+    leaveTypeId: [null as number | null, Validators.required],
     startDate: [null as Date | null, Validators.required],
     endDate: [null as Date | null, Validators.required],
     reason: ['', [Validators.required, Validators.maxLength(500)]]
@@ -67,10 +67,10 @@ export class ApplyLeaveComponent implements OnInit {
       }
     });
 
-    this.applyForm.get('leaveType')!.valueChanges.pipe(
+    this.applyForm.get('leaveTypeId')!.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(type => {
-      this.selectedBalance = this.balances.find(b => b.leaveType === type) ?? null;
+    ).subscribe(id => {
+      this.selectedBalance = this.balances.find(b => b.leaveType.id === id) ?? null;
     });
   }
 
@@ -84,7 +84,7 @@ export class ApplyLeaveComponent implements OnInit {
     const endDate = this.applyForm.value.endDate as Date;
 
     this.leaveService.submitLeaveRequest({
-      leaveType: this.applyForm.value.leaveType!,
+      leaveTypeId: this.applyForm.value.leaveTypeId!,
       startDate: startDate.toISOString().split('T')[0],
       endDate: endDate.toISOString().split('T')[0],
       reason: this.applyForm.value.reason!

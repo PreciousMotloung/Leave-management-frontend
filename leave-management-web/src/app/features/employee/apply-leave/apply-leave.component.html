@@ -16,12 +16,12 @@
           <!-- Leave Type -->
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Leave Type</mat-label>
-            <mat-select formControlName="leaveType">
+            <mat-select formControlName="leaveTypeId">
               @for (type of leaveTypes; track type.id) {
-                <mat-option [value]="type.name">{{ type.name }}</mat-option>
+                <mat-option [value]="type.id">{{ type.name | titlecase }}</mat-option>
               }
             </mat-select>
-            @if (applyForm.get('leaveType')?.hasError('required') && applyForm.get('leaveType')?.touched) {
+            @if (applyForm.get('leaveTypeId')?.hasError('required') && applyForm.get('leaveTypeId')?.touched) {
               <mat-error>Please select a leave type</mat-error>
             }
           </mat-form-field>
@@ -35,7 +35,7 @@
                 <strong [ngClass]="getBalanceClass(selectedBalance.remainingDays)">
                   {{ selectedBalance.remainingDays }} days
                 </strong>
-                remaining for {{ selectedBalance.leaveType }}
+                remaining for {{ selectedBalance.leaveType.name | titlecase }}
               </span>
             </div>
           }

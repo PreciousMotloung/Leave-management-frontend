@@ -34,18 +34,18 @@ export class LeaveService {
 
   // Manager endpoints
   getPendingRequests(): Observable<LeaveRequest[]> {
-    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/api/manager/leaves/pending`);
+    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/api/leave/pending`);
   }
 
   approveLeave(id: number): Observable<LeaveRequest> {
-    return this.http.patch<LeaveRequest>(`${this.apiUrl}/api/manager/leaves/${id}/approve`, {});
+    return this.http.put<LeaveRequest>(`${this.apiUrl}/api/leave/${id}/approve`, {});
   }
 
-  rejectLeave(id: number, reason: string): Observable<LeaveRequest> {
-    return this.http.patch<LeaveRequest>(`${this.apiUrl}/api/manager/leaves/${id}/reject`, { reason });
+  rejectLeave(id: number, rejectionReason: string): Observable<LeaveRequest> {
+    return this.http.put<LeaveRequest>(`${this.apiUrl}/api/leave/${id}/reject`, { rejectionReason });
   }
 
-  getTeamBalances(): Observable<LeaveBalance[]> {
-    return this.http.get<LeaveBalance[]>(`${this.apiUrl}/api/manager/team/balances`);
+  getUserLeaveBalances(userId: number): Observable<LeaveBalance[]> {
+    return this.http.get<LeaveBalance[]>(`${this.apiUrl}/api/leave/balance/${userId}`);
   }
 }

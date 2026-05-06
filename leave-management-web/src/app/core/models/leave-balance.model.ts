@@ -1,7 +1,10 @@
+import { LeaveType } from './leave-type.model';
+
 export interface LeaveBalance {
-  leaveType: string;
-  totalDays: number;
+  id: number;
+  leaveType: LeaveType;
+  availableDays: number;
   usedDays: number;
   remainingDays: number;
+  year: number;
 }
-

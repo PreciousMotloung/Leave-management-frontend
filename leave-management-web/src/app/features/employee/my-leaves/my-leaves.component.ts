@@ -1,5 +1,5 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { LeaveService } from '../../../core/services/leave.service';
@@ -12,7 +12,7 @@ import { LeaveRequest } from '../../../core/models/leave-request.model';
 
 @Component({
   selector: 'app-my-leaves',
-  imports: [MaterialModule, DatePipe, StatusChipComponent, LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [MaterialModule, DatePipe, TitleCasePipe, StatusChipComponent, LoadingSpinnerComponent, EmptyStateComponent],
   templateUrl: './my-leaves.component.html',
   styleUrl: './my-leaves.component.scss'
 })
@@ -51,7 +51,7 @@ export class MyLeavesComponent implements OnInit {
     const ref = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Cancel Leave Request',
-        message: `Are you sure you want to cancel your ${request.leaveType} leave request from ${request.startDate} to ${request.endDate}?`,
+        message: `Are you sure you want to cancel your ${request.leaveType.name.replace(/_/g, ' ')} leave request from ${request.startDate} to ${request.endDate}?`,
         confirmText: 'Yes, Cancel It',
         cancelText: 'Keep It'
       }

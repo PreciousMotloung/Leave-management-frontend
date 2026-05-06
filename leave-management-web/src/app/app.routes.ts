@@ -43,6 +43,8 @@ export const routes: Routes = [
     path: 'manager',
     canActivate: [authGuard, roleGuard],
     data: { role: 'MANAGER' },
+    loadComponent: () =>
+      import('./features/manager/shell/manager-shell.component').then(m => m.ManagerShellComponent),
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {

@@ -1,6 +1,6 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgClass, DatePipe } from '@angular/common';
+import { NgClass, DatePipe, TitleCasePipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -14,7 +14,7 @@ import { LeaveRequest } from '../../../core/models/leave-request.model';
 
 @Component({
   selector: 'app-employee-dashboard',
-  imports: [MaterialModule, RouterLink, NgClass, DatePipe, LoadingSpinnerComponent, StatusChipComponent, EmptyStateComponent],
+  imports: [MaterialModule, RouterLink, NgClass, DatePipe, TitleCasePipe, LoadingSpinnerComponent, StatusChipComponent, EmptyStateComponent],
   templateUrl: './employee-dashboard.component.html',
   styleUrl: './employee-dashboard.component.scss'
 })

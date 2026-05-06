@@ -26,15 +26,15 @@
   <!-- Leave Balance Cards -->
   <h2 class="section-title">Leave Balances</h2>
   <div class="balance-grid">
-    @for (balance of balances; track balance.leaveType) {
+    @for (balance of balances; track balance.id) {
       <mat-card class="balance-card">
         <mat-card-header>
-          <mat-card-title>{{ balance.leaveType }}</mat-card-title>
+          <mat-card-title>{{ balance.leaveType.name | titlecase }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div class="balance-stats">
             <div class="stat">
-              <span class="stat-value">{{ balance.totalDays }}</span>
+              <span class="stat-value">{{ balance.availableDays }}</span>
               <span class="stat-label">Total</span>
             </div>
             <div class="stat">
@@ -50,7 +50,7 @@
           </div>
           <mat-progress-bar
             mode="determinate"
-            [value]="(balance.usedDays / balance.totalDays) * 100"
+            [value]="(balance.usedDays / balance.availableDays) * 100"
             [color]="balance.remainingDays <= 2 ? 'warn' : 'primary'">
           </mat-progress-bar>
         </mat-card-content>
@@ -68,7 +68,7 @@
         <table mat-table [dataSource]="recentRequests" class="full-width">
           <ng-container matColumnDef="leaveType">
             <th mat-header-cell *matHeaderCellDef>Leave Type</th>
-            <td mat-cell *matCellDef="let row">{{ row.leaveType }}</td>
+            <td mat-cell *matCellDef="let row">{{ row.leaveType.name | titlecase }}</td>
           </ng-container>
           <ng-container matColumnDef="startDate">
             <th mat-header-cell *matHeaderCellDef>Start Date</th>
