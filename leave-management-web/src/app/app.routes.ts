@@ -18,6 +18,8 @@ export const routes: Routes = [
     path: 'employee',
     canActivate: [authGuard, roleGuard],
     data: { role: 'EMPLOYEE' },
+    loadComponent: () =>
+      import('./features/employee/shell/employee-shell.component').then(m => m.EmployeeShellComponent),
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {

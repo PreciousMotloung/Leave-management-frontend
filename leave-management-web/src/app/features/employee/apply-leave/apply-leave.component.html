@@ -1,0 +1,126 @@
+<div class="page-container">
+  @if (isLoadingData) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  <div class="page-header">
+    <h1>Apply for Leave</h1>
+    <p class="subtitle">Submit a new leave request</p>
+  </div>
+
+  <div class="form-layout">
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form [formGroup]="applyForm" (ngSubmit)="onSubmit()">
+
+          <!-- Leave Type -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Leave Type</mat-label>
+            <mat-select formControlName="leaveType">
+              @for (type of leaveTypes; track type.id) {
+                <mat-option [value]="type.name">{{ type.name }}</mat-option>
+              }
+            </mat-select>
+            @if (applyForm.get('leaveType')?.hasError('required') && applyForm.get('leaveType')?.touched) {
+              <mat-error>Please select a leave type</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Balance Info -->
+          @if (selectedBalance) {
+            <div class="balance-info">
+              <mat-icon>info_outline</mat-icon>
+              <span>
+                You have
+                <strong [ngClass]="getBalanceClass(selectedBalance.remainingDays)">
+                  {{ selectedBalance.remainingDays }} days
+                </strong>
+                remaining for {{ selectedBalance.leaveType }}
+              </span>
+            </div>
+          }
+
+          <!-- Date Range -->
+          <div class="date-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="startPicker" formControlName="startDate" readonly />
+              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+              @if (applyForm.get('startDate')?.hasError('required') && applyForm.get('startDate')?.touched) {
+                <mat-error>Start date is required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endPicker" formControlName="endDate" readonly />
+              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+              @if (applyForm.get('endDate')?.hasError('required') && applyForm.get('endDate')?.touched) {
+                <mat-error>End date is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <!-- Days calculated -->
+          @if (numberOfDays > 0) {
+            <div class="days-summary" [class.over-limit]="isBalanceInsufficient">
+              <mat-icon>{{ isBalanceInsufficient ? 'warning' : 'check_circle' }}</mat-icon>
+              <span>
+                {{ numberOfDays }} working day(s) selected
+                @if (isBalanceInsufficient) {
+                  — <strong>Exceeds your remaining balance!</strong>
+                }
+              </span>
+            </div>
+          }
+
+          <!-- Reason -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Reason</mat-label>
+            <textarea
+              matInput
+              formControlName="reason"
+              rows="4"
+              placeholder="Briefly describe the reason for your leave..."
+              maxlength="500">
+            </textarea>
+            <mat-hint align="end">{{ applyForm.get('reason')?.value?.length ?? 0 }}/500</mat-hint>
+            @if (applyForm.get('reason')?.hasError('required') && applyForm.get('reason')?.touched) {
+              <mat-error>Reason is required</mat-error>
+            }
+            @if (applyForm.get('reason')?.hasError('maxlength')) {
+              <mat-error>Maximum 500 characters</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Messages -->
+          @if (errorMessage) {
+            <p class="error-message"><mat-icon inline>error_outline</mat-icon> {{ errorMessage }}</p>
+          }
+          @if (successMessage) {
+            <p class="success-message"><mat-icon inline>check_circle</mat-icon> {{ successMessage }}</p>
+          }
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              class="full-width"
+              [disabled]="applyForm.invalid || isSubmitting || isBalanceInsufficient">
+              <span class="spinner-button">
+                @if (isSubmitting) { <mat-spinner diameter="20"></mat-spinner> }
+                {{ isSubmitting ? 'Submitting...' : 'Submit Leave Request' }}
+              </span>
+            </button>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

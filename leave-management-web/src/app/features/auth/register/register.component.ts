@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../core/services/auth.service';
 import { MaterialModule } from '../../../shared/material.module';
@@ -52,11 +53,23 @@ export class RegisterComponent {
       next: () => {
         this.router.navigate(['/login']);
       },
-      error: (err: { error?: { message?: string } }) => {
+      error: (err: HttpErrorResponse) => {
         this.isLoading = false;
-        this.errorMessage = err?.error?.message ?? 'Registration failed. Please try again.';
+        this.errorMessage = this.parseError(err);
       }
     });
+  }
+
+  private parseError(err: HttpErrorResponse): string {
+    if (err.status === 0) {
+      return 'Cannot connect to the server. Make sure the backend is running on localhost:8080.';
+    }
+    if (typeof err.error === 'string' && err.error.length > 0) {
+      return err.error;
+    }
+    if (err.error?.message) return err.error.message;
+    if (err.error?.error) return err.error.error;
+    return `Registration failed (HTTP ${err.status}). Please try again.`;
   }
 }
 

@@ -1,0 +1,102 @@
+<div class="dashboard-container">
+  @if (isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  }
+
+  <!-- Welcome Header -->
+  <div class="page-header">
+    <div>
+      <h1>Welcome back, {{ user?.firstName }}! 👋</h1>
+      <p class="subtitle">Here's your leave summary</p>
+    </div>
+    <a mat-raised-button color="primary" routerLink="../apply-leave">
+      <mat-icon>add</mat-icon>
+      Apply for Leave
+    </a>
+  </div>
+
+  @if (errorMessage) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <p class="error-message"><mat-icon inline>error_outline</mat-icon> {{ errorMessage }}</p>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Leave Balance Cards -->
+  <h2 class="section-title">Leave Balances</h2>
+  <div class="balance-grid">
+    @for (balance of balances; track balance.leaveType) {
+      <mat-card class="balance-card">
+        <mat-card-header>
+          <mat-card-title>{{ balance.leaveType }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="balance-stats">
+            <div class="stat">
+              <span class="stat-value">{{ balance.totalDays }}</span>
+              <span class="stat-label">Total</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value used">{{ balance.usedDays }}</span>
+              <span class="stat-label">Used</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" [ngClass]="getBalanceClass(balance.remainingDays)">
+                {{ balance.remainingDays }}
+              </span>
+              <span class="stat-label">Remaining</span>
+            </div>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="(balance.usedDays / balance.totalDays) * 100"
+            [color]="balance.remainingDays <= 2 ? 'warn' : 'primary'">
+          </mat-progress-bar>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+
+  <!-- Recent Leave Requests -->
+  <h2 class="section-title">Recent Leave Requests</h2>
+  <mat-card>
+    <mat-card-content>
+      @if (!isLoading && recentRequests.length === 0) {
+        <app-empty-state message="No leave requests yet" icon="event_busy"></app-empty-state>
+      } @else {
+        <table mat-table [dataSource]="recentRequests" class="full-width">
+          <ng-container matColumnDef="leaveType">
+            <th mat-header-cell *matHeaderCellDef>Leave Type</th>
+            <td mat-cell *matCellDef="let row">{{ row.leaveType }}</td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Start Date</th>
+            <td mat-cell *matCellDef="let row">{{ row.startDate | date:'mediumDate' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef>End Date</th>
+            <td mat-cell *matCellDef="let row">{{ row.endDate | date:'mediumDate' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="numberOfDays">
+            <th mat-header-cell *matHeaderCellDef>Days</th>
+            <td mat-cell *matCellDef="let row">{{ row.numberOfDays }}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <app-status-chip [status]="row.status"></app-status-chip>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['leaveType','startDate','endDate','numberOfDays','status']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['leaveType','startDate','endDate','numberOfDays','status']"></tr>
+        </table>
+        <div class="view-all">
+          <a mat-button color="primary" routerLink="../my-leaves">View All Requests →</a>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+

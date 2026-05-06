@@ -1,0 +1,14 @@
+.page-container { padding: 32px; max-width: 1200px; }
+
+.page-header {
+  margin-bottom: 24px;
+  h1 { font-size: 28px; font-weight: 700; margin: 0; color: #1a237e; }
+  .subtitle { color: #666; margin: 4px 0 0; }
+}
+
+.table-wrapper { overflow-x: auto; }
+
+table { min-width: 700px; }
+
+.mat-mdc-row:hover { background: #f5f5f5; }
+

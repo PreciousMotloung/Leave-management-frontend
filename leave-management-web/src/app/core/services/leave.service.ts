@@ -11,24 +11,25 @@ export class LeaveService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
 
-  getMyLeaves(): Observable<LeaveRequest[]> {
-    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/api/leaves/my`);
-  }
-
-  applyLeave(request: ApplyLeaveRequest): Observable<LeaveRequest> {
-    return this.http.post<LeaveRequest>(`${this.apiUrl}/api/leaves/apply`, request);
-  }
-
-  cancelLeave(id: number): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/api/leaves/${id}/cancel`, {});
+  // Employee endpoints
+  getMyLeaveRequests(): Observable<LeaveRequest[]> {
+    return this.http.get<LeaveRequest[]>(`${this.apiUrl}/api/leave/my-requests`);
   }
 
   getMyBalances(): Observable<LeaveBalance[]> {
-    return this.http.get<LeaveBalance[]>(`${this.apiUrl}/api/leaves/balances`);
+    return this.http.get<LeaveBalance[]>(`${this.apiUrl}/api/leave/balance`);
   }
 
   getLeaveTypes(): Observable<LeaveType[]> {
-    return this.http.get<LeaveType[]>(`${this.apiUrl}/api/leave-types`);
+    return this.http.get<LeaveType[]>(`${this.apiUrl}/api/leave/types`);
+  }
+
+  submitLeaveRequest(request: ApplyLeaveRequest): Observable<LeaveRequest> {
+    return this.http.post<LeaveRequest>(`${this.apiUrl}/api/leave/submit`, request);
+  }
+
+  cancelLeaveRequest(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/api/leave/${id}/cancel`, {});
   }
 
   // Manager endpoints
@@ -48,4 +49,3 @@ export class LeaveService {
     return this.http.get<LeaveBalance[]>(`${this.apiUrl}/api/manager/team/balances`);
   }
 }
-
